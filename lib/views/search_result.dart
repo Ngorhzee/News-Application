@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/models/functions.dart';
 import 'package:news_app/models/get_news.dart';
 import 'package:news_app/utilities/constants.dart';
 import 'package:news_app/views/news_screen.dart';
 import 'package:news_app/widget/card.dart';
+
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key, required this.keyword}) : super(key: key);
@@ -14,7 +16,9 @@ class SearchResult extends StatefulWidget {
 class _SearchResultState extends State<SearchResult> {
   List<Map<String,dynamic>> newsList=[];
   GetNews getNews=GetNews();
-  @override
+  bool pressed=false;
+  NewsFunctions functions= NewsFunctions();
+
 
 
   @override
@@ -74,14 +78,58 @@ class _SearchResultState extends State<SearchResult> {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return NewsScreen(
+                                news: widget.keyword[index],
                                   image: widget.keyword[index]['image_url'],
                                   title: widget.keyword[index]['title'],
-                                  content: widget.keyword[index]['content'],
+                                  link: widget.keyword[index]['link'],
                                   author: widget.keyword[index]['creator'][0],
-                                  date: widget.keyword[index]['pubDate']);
+                                  date: widget.keyword[index]['pubDate'],
+                                  content: widget.keyword[index]['content'],);
                             }));
                           }),
                           child: CardWidget(
+                            icon:pressed
+                        ? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : const Icon(
+                            Icons.favorite_outline,
+                            color: Colors.white,
+                          ),
+                                  onpress: () {
+                      if(pressed==true){
+                        pressed = false;
+                        final snack = SnackBar(
+                        content: Text(
+                          'Removed from Favourite',
+                          style: kDateStyle.copyWith(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black,
+                        elevation: 5,
+                        duration: const Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+
+                      functions.removefavouriteNews(functions.newsList[index]);
+                      }
+                      else{
+                        pressed==true;
+                         final snack = SnackBar(
+                        content: Text(
+                          'Added To Favourite',
+                          style: kDateStyle.copyWith(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black,
+                        elevation: 5,
+                        duration: const Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+
+                      functions.addfavouriteNews(functions.newsList[index]);
+                      }
+                     
+                    },
                               image: widget.keyword[index]['image_url'],
                               title: widget.keyword[index]['title'],
                               date: widget.keyword[index]['pubDate'],

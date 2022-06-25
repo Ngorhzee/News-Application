@@ -7,7 +7,8 @@ import 'package:news_app/views/search_result.dart';
 import '../models/shared_pref.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({Key? key}) : super(key: key);
+   SearchView({Key? key,required this.searchValue}) : super(key: key);
+  List<String> searchValue;
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -22,9 +23,12 @@ class _SearchViewState extends State<SearchView> {
   }
 
   Future<List<String>> saveSearch()async {
-    StoreSearch storeSearch = StoreSearch();
-    searchValue = await storeSearch.storeSearch() ?? [];
-    return searchValue;
+    // StoreSearch storeSearch = StoreSearch();
+    //   widget.searchValue = await storeSearch.storeSearch() ?? [];
+    setState((){
+      widget.searchValue;
+    });
+    return widget.searchValue;
   }
 
   @override
@@ -59,7 +63,7 @@ class _SearchViewState extends State<SearchView> {
                                 fontSize: 16, color: Colors.grey),
                             prefixIcon: IconButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.pop(context,widget.searchValue);
                                 },
                                 icon: const Icon(Icons.arrow_back)),
                           ),
@@ -78,9 +82,9 @@ class _SearchViewState extends State<SearchView> {
                                     )),
                               ),
                             );
-                             searchValue.add(value);
+                             widget.searchValue.add(value);
                             StoreSearch storeSearch = StoreSearch();
-                            await storeSearch.saveSearch(searchValue);
+                            await storeSearch.saveSearch(widget.searchValue);
                           },
                         ),
                       )
@@ -99,11 +103,11 @@ class _SearchViewState extends State<SearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ...List.generate(
-                              searchValue.length,
+                              widget.searchValue.length,
                               (index) => GestureDetector(
                                 onTap: ()async {
                                   GetNews getNews = GetNews();
-                              news.addAll(await getNews.getByKeyword(searchValue[index]));
+                              news.addAll(await getNews.getByKeyword(widget.searchValue[index]));
 
                               Navigator.push(
                                 context,
@@ -117,7 +121,7 @@ class _SearchViewState extends State<SearchView> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
-                                        searchValue[index],
+                                        widget.searchValue[index],
                                         style: GoogleFonts.nunitoSans(
                                             color: Colors.black,
                                             fontSize: 20,

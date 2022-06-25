@@ -8,12 +8,17 @@ class BreakingNews extends StatelessWidget {
       required this.image,
       required this.title,
       required this.date,
-      required this.author})
+      required this.author,
+      required this.onpress,
+      required this.icon,
+      })
       : super(key: key);
   final String? image;
   final String? title;
   final String? author;
   final String date;
+  final VoidCallback onpress;
+  final Icon icon;
   //final String image;
   //final String image;
 
@@ -67,7 +72,11 @@ class BreakingNews extends StatelessWidget {
                         DateTime.parse(date).hour.toString() +
                         ':' +
                         DateTime.parse(date).minute.toString(),
-                    style: kDateStyle)
+                    style: kDateStyle),
+              IconButton(
+                    onPressed: onpress,
+                    icon: icon
+                  )
               ],
             ),
           )

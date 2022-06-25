@@ -6,8 +6,8 @@ import 'package:news_app/views/splash_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  StoreSearch storeSearch=StoreSearch();
-  await storeSearch.init();
+  //StoreSearch storeSearch=StoreSearch();
+  //await storeSearch.init();
   runApp(const MyApp());
 }
 

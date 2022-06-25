@@ -8,12 +8,17 @@ class CardWidget extends StatelessWidget {
       required this.image,
       required this.title,
       required this.date,
-      required this.time})
+      required this.time,
+       this.onpress,
+       this.icon,
+      })
       : super(key: key);
   final String? image;
   final String? title;
   final String date;
   final String time;
+  final VoidCallback? onpress;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +87,7 @@ class CardWidget extends StatelessWidget {
                                 'am',
                             style: kDateStyle,
                           ),
+                          
                         ],
                       ),
                       const SizedBox(
@@ -100,7 +106,8 @@ class CardWidget extends StatelessWidget {
                                 '/' +
                                 DateTime.parse(date).year.toString(),
                             style: kDateStyle,
-                          )
+                          ),
+                          IconButton(onPressed:onpress , icon: icon??Icon(null))
                         ],
                       )
                     ],

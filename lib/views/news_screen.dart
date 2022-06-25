@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/models/functions.dart';
+
 import 'package:news_app/utilities/constants.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'more_news.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen(
       {Key? key,
       required this.image,
+      required this.news,
       required this.title,
-      required this.content,
+      required this.link,
       required this.author,
+      required this.content,
       required this.date})
       : super(key: key);
   final String? image;
   final String title;
+  final String? link;
   final String? content;
   final String author;
   final String date;
+  final Map<String, dynamic> news;
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();
@@ -23,6 +31,15 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   late String image;
+  bool pressed = false;
+  NewsFunctions functions = NewsFunctions();
+
+  toggle() {
+    setState(() {
+      pressed = !pressed;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,22 +52,63 @@ class _NewsScreenState extends State<NewsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.white),
-                      child: const Center(
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                        ),
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
                       ),
                     ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      toggle();
+                      if(pressed==false){
+                        
+                        final snack = SnackBar(
+                        content: Text(
+                          'Removed from Favourite',
+                          style: kDateStyle.copyWith(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black,
+                        elevation: 5,
+                        duration: const Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+
+                      functions.removefavouriteNews(widget.news);
+                      }
+                      else{
+                        pressed==true;
+                         final snack = SnackBar(
+                        content: Text(
+                          'Added To Favourite',
+                          style: kDateStyle.copyWith(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black,
+                        elevation: 5,
+                        duration: const Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+
+                      functions.addfavouriteNews(widget.news);
+                      }
+                     
+                    },
+                    icon: pressed
+                        ? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : const Icon(
+                            Icons.favorite_outline,
+                            color: Colors.white,
+                          ),
                   )
                 ],
               ),
@@ -68,8 +126,10 @@ class _NewsScreenState extends State<NewsScreen> {
                                     'https://thumbs.dreamstime.com/z/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg'))),
                       ),
                     ),
-                  const  SliverToBoxAdapter(
-                      child: SizedBox(height: 15,),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 15,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Text(
@@ -77,8 +137,10 @@ class _NewsScreenState extends State<NewsScreen> {
                         style: kTitleStyle,
                       ),
                     ),
-                    const  SliverToBoxAdapter(
-                      child: SizedBox(height: 15,),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 15,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Row(
@@ -93,19 +155,46 @@ class _NewsScreenState extends State<NewsScreen> {
                                 '/' +
                                 DateTime.parse(widget.date).month.toString() +
                                 '/' +
-                                DateTime.parse(widget.date).year.toString() ,
+                                DateTime.parse(widget.date).year.toString(),
                             style: kDateStyle,
                           )
                         ],
-                    
                       ),
                     ),
-                    const  SliverToBoxAdapter(
-                      child: SizedBox(height: 15,),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 15,
+                      ),
                     ),
-                    SliverToBoxAdapter(child: Text(widget.content??'Nothing To Show', style: GoogleFonts.nunito(fontSize:16,fontWeight: FontWeight.w400,color: Colors.black87)))
+                    SliverToBoxAdapter(
+                        child: Text(widget.content ?? 'Nothing to show')),
                   ],
                 ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) {
+                        return MoreNews(
+                            link: widget.link ?? 'No Availaible Url');
+                      }),
+                    ),
+                  );
+                },
+                child: Container(
+                    height: 80,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: const Center(
+                        child: Text('Show More',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600)))),
               )
             ],
           ),
