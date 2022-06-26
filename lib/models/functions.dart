@@ -19,6 +19,7 @@ class NewsFunctions{
   }
   
   addfavouriteNews(Map<String, dynamic> item)async{
+    
     favouriteList.add(item);
   }
   removefavouriteNews(Map<String, dynamic> item)async{

@@ -112,11 +112,13 @@ class _HomePageState extends State<HomePage> {
                                 List<String> searchValue =
                                     await storeSearch.storeSearch() ?? [];
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => SearchView(
-                                              searchValue: searchValue,
-                                            ))));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => SearchView(
+                                          searchValue: searchValue,
+                                        )),
+                                  ),
+                                );
                               },
                               icon: const Icon(
                                 Icons.search_outlined,
@@ -162,12 +164,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SliverToBoxAdapter(
                               child: GestureDetector(
-                                  onTap: (() {
-                                    Navigator.push(
+                                  onTap: () async {
+                                    bool pressed = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: ((context) {
                                           return NewsScreen(
+                                            pressed: pressed1,
                                               news: functions
                                                   .newsList[randomNumber],
                                               image: functions
@@ -191,7 +194,12 @@ class _HomePageState extends State<HomePage> {
                                         }),
                                       ),
                                     );
-                                  }),
+                                    print(pressed);
+                                    if (pressed == true || pressed == false) {
+                                      pressed1 = pressed;
+                                      setState(() {});
+                                    }
+                                  },
                                   child: functions.newsList.isEmpty
                                       ? Container(
                                           color: Colors.red,
@@ -307,12 +315,13 @@ class _HomePageState extends State<HomePage> {
                                   ...List.generate(
                                       functions.newsList.length,
                                       (index) => GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
+                                          onTap: () async {
+                                            bool pressed = await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: ((context) {
                                                   return NewsScreen(
+                                                    pressed: pressed2,
                                                       news: functions
                                                           .newsList[index],
                                                       image: functions
@@ -335,6 +344,11 @@ class _HomePageState extends State<HomePage> {
                                                 }),
                                               ),
                                             );
+                                            if (pressed == true ||
+                                                pressed == false) {
+                                              pressed2 = pressed;
+                                              setState(() {});
+                                            }
                                           },
                                           child: functions.newsList.isEmpty
                                               ? Container(
@@ -354,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                   onpress: () {
                                                     toggle2();
-                                                    
+
                                                     if (pressed2 == true) {
                                                       final snack = SnackBar(
                                                         content: Text(

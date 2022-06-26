@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/models/functions.dart';
 import 'package:news_app/models/get_news.dart';
 import 'package:news_app/utilities/constants.dart';
 import 'package:news_app/views/search_result.dart';
@@ -15,7 +16,7 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  List<String> searchValue = [];
+  NewsFunctions functions=NewsFunctions();
   @override
   void initState() {
     super.initState();
@@ -30,11 +31,19 @@ class _SearchViewState extends State<SearchView> {
     });
     return widget.searchValue;
   }
-
+TextEditingController controller = TextEditingController();
+searchByKeyWord(String keyWord)async{
+  setState(() {
+    
+  });
+  await functions.getNewsByKeyword(keyWord);
+  setState(() {
+    
+  });
+}
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
-    List<Map<String, dynamic>> news = [];
+    
 
     return Scaffold(
       body: SafeArea(
@@ -71,14 +80,14 @@ class _SearchViewState extends State<SearchView> {
                           onSubmitted: (value) async {
                             value = controller.text;
                            
-                            GetNews getNews = GetNews();
-                            news.addAll(await getNews.getByKeyword(value));
+                            
+                            searchByKeyWord(value);
 
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: ((context) => SearchResult(
-                                      keyword: news,
+                                      keyword: functions.searchNews,
                                     )),
                               ),
                             );
@@ -107,13 +116,13 @@ class _SearchViewState extends State<SearchView> {
                               (index) => GestureDetector(
                                 onTap: ()async {
                                   GetNews getNews = GetNews();
-                              news.addAll(await getNews.getByKeyword(widget.searchValue[index]));
+                              searchByKeyWord(widget.searchValue[index]);
 
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: ((context) => SearchResult(
-                                        keyword: news,
+                                        keyword: functions.searchNews,
                                       )),
                                 ),
                               );

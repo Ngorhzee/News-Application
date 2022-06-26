@@ -7,9 +7,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'more_news.dart';
 
 class NewsScreen extends StatefulWidget {
-  const NewsScreen(
+   NewsScreen(
       {Key? key,
       required this.image,
+      this.pressed,
       required this.news,
       required this.title,
       required this.link,
@@ -24,6 +25,7 @@ class NewsScreen extends StatefulWidget {
   final String author;
   final String date;
   final Map<String, dynamic> news;
+  late  bool? pressed;
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();
@@ -31,17 +33,21 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   late String image;
-  bool pressed = false;
+ // bool pressed = widget.pressed;
   NewsFunctions functions = NewsFunctions();
 
   toggle() {
     setState(() {
-      pressed = !pressed;
+     
+        widget.pressed = !widget.pressed!;
+      
+      
     });
   }
-
+   
   @override
   Widget build(BuildContext context) {
+    bool onPress=widget.pressed??true;
     return Scaffold(
       backgroundColor: kBackgroundColor2,
       body: SafeArea(
@@ -52,15 +58,18 @@ class _NewsScreenState extends State<NewsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
-                    child: const Center(
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context,onPress),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.white),
+                      child: const Center(
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -68,7 +77,7 @@ class _NewsScreenState extends State<NewsScreen> {
                   IconButton(
                     onPressed: () {
                       toggle();
-                      if(pressed==false){
+                      if(widget.pressed==false){
                         
                         final snack = SnackBar(
                         content: Text(
@@ -84,7 +93,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       functions.removefavouriteNews(widget.news);
                       }
                       else{
-                        pressed==true;
+                        widget.pressed==true;
                          final snack = SnackBar(
                         content: Text(
                           'Added To Favourite',
@@ -98,9 +107,10 @@ class _NewsScreenState extends State<NewsScreen> {
 
                       functions.addfavouriteNews(widget.news);
                       }
+                      onPress=widget.pressed!;
                      
                     },
-                    icon: pressed
+                    icon: widget.pressed??true
                         ? const Icon(
                             Icons.favorite,
                             color: Colors.red,

@@ -13,22 +13,28 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+   late bool? pressed;
   @override
   Widget build(BuildContext context) {
     //print(widget.favouriteList);
     return Scaffold(
       backgroundColor: kBackgroundColor2,
       body: SafeArea(
+        
         child: Column(children: [
           Row(children: [
             Text(
               'Favourites',
               style: kHealineStyle,
             ),
+            const Spacer(),
+            widget.favouriteList.isEmpty?Text(''):
             IconButton(
               onPressed: () {
-            
-                showDialog(
+                if(widget.favouriteList.isEmpty){
+
+                }else{
+                  showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
@@ -53,14 +59,17 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 onPressed: () {
                                   setState(() {});
                                   widget.favouriteList.clear();
+                                  pressed=false;
                                   Navigator.pop(context);
                                 },
                               ),
+                              const Spacer(),
                               ElevatedButton(
+                                
                                 child: Text(
                                   'No',
                                   style:
-                                      kDateStyle.copyWith(color: Colors.blue),
+                                      kDateStyle.copyWith(color: Colors.blue,backgroundColor: kBackgroundColor2),
                                 ),
                                 autofocus: true,
                                 onPressed: () {
@@ -74,6 +83,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         ],
                       );
                     });
+                }
+                
               },
               icon: const Icon(
                 Icons.delete,
@@ -86,8 +97,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: Column(
+                child:  widget.favouriteList.isEmpty?
+                    Center(child: Text('No News Added',style: kHealineStyle.copyWith(color: Colors.black),)):
+                Column(
                   children: [
+                   
                     ...List.generate(
                       widget.favouriteList.length,
                       (index) => 
@@ -118,6 +132,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                             child: CardWidget(
                               onpress:() {
                                 widget.favouriteList.removeAt(index);
+                                setState(() {
+                                  
+                                });
                               },
                               icon:const Icon (Icons.delete,color: Colors.red,),
                                 image: widget.favouriteList[index]['image_url'],

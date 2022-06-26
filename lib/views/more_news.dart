@@ -32,7 +32,7 @@ class _MoreNewsState extends State<MoreNews> {
           return false;
         }
         else{
-          return false;
+          return true;
           
         }
         
@@ -41,7 +41,15 @@ class _MoreNewsState extends State<MoreNews> {
         child: Scaffold(
           body:Column(
             children: [
-              Text('More News',style: kHealineStyle,),
+              Row(
+                children: [
+                  IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: Icon(Icons.arrow_back,color: Colors.black,)),
+
+                  Text('More News',style: kHealineStyle,),
+                ]
+              ),
               LinearProgressIndicator(
                     value: progress,
                     backgroundColor: Colors.white,
