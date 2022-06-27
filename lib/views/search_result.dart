@@ -77,12 +77,7 @@ class _SearchResultState extends State<SearchResult> {
                               return NewsScreen(
                                 pressed: pressed,
                                 news: widget.keyword[index],
-                                image: widget.keyword[index]['image_url'],
-                                title: widget.keyword[index]['title'],
-                                link: widget.keyword[index]['link'],
-                                author: widget.keyword[index]['creator'][0],
-                                date: widget.keyword[index]['pubDate'],
-                                content: widget.keyword[index]['content'],
+                                
                               );
                             }));
                             if (press == true || press == false) {

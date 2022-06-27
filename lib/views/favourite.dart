@@ -4,9 +4,10 @@ import 'package:news_app/views/news_screen.dart';
 import 'package:news_app/widget/card.dart';
 
 class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({Key? key, required this.favouriteList})
+  const FavoriteScreen({Key? key, required this.favouriteList, this.pressed})
       : super(key: key);
   final List<Map<String, dynamic>> favouriteList;
+  final bool? pressed;
 
   @override
   State<FavoriteScreen> createState() => _FavoriteScreenState();
@@ -23,6 +24,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         
         child: Column(children: [
           Row(children: [
+            IconButton(onPressed: (){
+              Navigator.pop(context,!widget.pressed!);
+            }, icon:const Icon(Icons.arrow_back)),
             Text(
               'Favourites',
               style: kHealineStyle,
@@ -48,7 +52,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         ]),
                         actions: [
                           Row(
-                            mainAxisSize:MainAxisSize.min,
+                            //mainAxisSize:MainAxisSize.min,
                             children: [
                               ElevatedButton(
                                 child: Text(
@@ -112,19 +116,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 MaterialPageRoute(
                                   builder: ((context) {
                                     return NewsScreen(
-                                        image: widget.favouriteList[index]
-                                            ['image_url'],
-                                        news: widget.favouriteList[index],
-                                        title: widget.favouriteList[index]
-                                            ['title'],
-                                        link: widget.favouriteList[index]
-                                            ['link'],
-                                        author: widget.favouriteList[index]
-                                            ['creator'][0],
-                                        content: widget.favouriteList[index]
-                                            ['content'],
-                                        date: widget.favouriteList[index]
-                                            ['pubDate']);
+                                       news: widget.favouriteList[index],);
                                   }),
                                 ),
                               );
@@ -132,6 +124,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                             child: CardWidget(
                               onpress:() {
                                 widget.favouriteList.removeAt(index);
+                                pressed=false;
                                 setState(() {
                                   
                                 });

@@ -1,53 +1,38 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:news_app/models/functions.dart';
 
 import 'package:news_app/utilities/constants.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import 'more_news.dart';
 
 class NewsScreen extends StatefulWidget {
-   NewsScreen(
-      {Key? key,
-      required this.image,
-      this.pressed,
-      required this.news,
-      required this.title,
-      required this.link,
-      required this.author,
-      required this.content,
-      required this.date})
-      : super(key: key);
-  final String? image;
-  final String title;
-  final String? link;
-  final String? content;
-  final String author;
-  final String date;
+  NewsScreen({
+    Key? key,
+    this.pressed,
+    required this.news,
+  }) : super(key: key);
+
   final Map<String, dynamic> news;
-  late  bool? pressed;
+  late bool? pressed;
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  late String image;
- // bool pressed = widget.pressed;
   NewsFunctions functions = NewsFunctions();
 
   toggle() {
     setState(() {
-     
-        widget.pressed = !widget.pressed!;
-      
-      
+      widget.pressed = !widget.pressed!;
     });
   }
-   
+
   @override
   Widget build(BuildContext context) {
-    bool onPress=widget.pressed??true;
+    bool onPress = widget.pressed ?? true;
     return Scaffold(
       backgroundColor: kBackgroundColor2,
       body: SafeArea(
@@ -59,7 +44,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context,onPress),
+                    onTap: () => Navigator.pop(context, onPress),
                     child: Container(
                       height: 40,
                       width: 40,
@@ -77,40 +62,37 @@ class _NewsScreenState extends State<NewsScreen> {
                   IconButton(
                     onPressed: () {
                       toggle();
-                      if(widget.pressed==false){
-                        
+                      if (widget.pressed == false) {
                         final snack = SnackBar(
-                        content: Text(
-                          'Removed from Favourite',
-                          style: kDateStyle.copyWith(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.black,
-                        elevation: 5,
-                        duration: const Duration(seconds: 2),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                          content: Text(
+                            'Removed from Favourite',
+                            style: kDateStyle.copyWith(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.black,
+                          elevation: 5,
+                          duration: const Duration(seconds: 2),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
 
-                      functions.removefavouriteNews(widget.news);
-                      }
-                      else{
-                        widget.pressed==true;
-                         final snack = SnackBar(
-                        content: Text(
-                          'Added To Favourite',
-                          style: kDateStyle.copyWith(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.black,
-                        elevation: 5,
-                        duration: const Duration(seconds: 2),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                        functions.removefavouriteNews(widget.news);
+                      } else {
+                        widget.pressed == true;
+                        final snack = SnackBar(
+                          content: Text(
+                            'Added To Favourite',
+                            style: kDateStyle.copyWith(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.black,
+                          elevation: 5,
+                          duration: const Duration(seconds: 2),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
 
-                      functions.addfavouriteNews(widget.news);
+                        functions.addfavouriteNews(widget.news);
                       }
-                      onPress=widget.pressed!;
-                     
+                      onPress = widget.pressed!;
                     },
-                    icon: widget.pressed??true
+                    icon: widget.pressed ?? true
                         ? const Icon(
                             Icons.favorite,
                             color: Colors.red,
@@ -132,7 +114,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                                image: NetworkImage(widget.image ??
+                                image: NetworkImage(widget.news['image_url'] ??
                                     'https://thumbs.dreamstime.com/z/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg'))),
                       ),
                     ),
@@ -143,7 +125,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     ),
                     SliverToBoxAdapter(
                       child: Text(
-                        widget.title,
+                        widget.news['title'],
                         style: kTitleStyle,
                       ),
                     ),
@@ -156,16 +138,22 @@ class _NewsScreenState extends State<NewsScreen> {
                       child: Row(
                         children: [
                           Text(
-                            widget.author,
+                            widget.news['creator'][0],
                             style: kDateStyle,
                           ),
                           const Spacer(),
                           Text(
-                            DateTime.parse(widget.date).day.toString() +
+                            DateTime.parse(widget.news['pubDate'])
+                                    .day
+                                    .toString() +
                                 '/' +
-                                DateTime.parse(widget.date).month.toString() +
+                                DateTime.parse(widget.news['pubDate'])
+                                    .month
+                                    .toString() +
                                 '/' +
-                                DateTime.parse(widget.date).year.toString(),
+                                DateTime.parse(widget.news['pubDate'])
+                                    .year
+                                    .toString(),
                             style: kDateStyle,
                           )
                         ],
@@ -177,7 +165,8 @@ class _NewsScreenState extends State<NewsScreen> {
                       ),
                     ),
                     SliverToBoxAdapter(
-                        child: Text(widget.content ?? 'Nothing to show')),
+                        child:
+                            Text(widget.news['content'] ?? 'Nothing to show')),
                   ],
                 ),
               ),
@@ -188,7 +177,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     MaterialPageRoute(
                       builder: ((context) {
                         return MoreNews(
-                            link: widget.link ?? 'No Availaible Url');
+                            link: widget.news['link'] ?? 'No Availaible Url');
                       }),
                     ),
                   );

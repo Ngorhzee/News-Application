@@ -134,7 +134,8 @@ class _HomePageState extends State<HomePage> {
                                     builder: ((context) {
                                       return FavoriteScreen(
                                           favouriteList:
-                                              NewsFunctions.favouriteList);
+                                              NewsFunctions.favouriteList,
+                                          pressed: true);
                                     }),
                                   ),
                                 );
@@ -171,26 +172,9 @@ class _HomePageState extends State<HomePage> {
                                         builder: ((context) {
                                           return NewsScreen(
                                             pressed: pressed1,
-                                              news: functions
-                                                  .newsList[randomNumber],
-                                              image: functions
-                                                      .newsList[randomNumber]
-                                                  ['image_url'],
-                                              content: functions
-                                                      .newsList[randomNumber]
-                                                  ['content'],
-                                              title: functions
-                                                      .newsList[randomNumber]
-                                                  ['title'],
-                                              link: functions
-                                                      .newsList[randomNumber]
-                                                  ['link'],
-                                              author: functions
-                                                      .newsList[randomNumber]
-                                                  ['creator'][0],
-                                              date:
-                                                  functions.newsList[randomNumber]
-                                                      ['pubDate']);
+                                            news: functions
+                                                .newsList[randomNumber],
+                                          );
                                         }),
                                       ),
                                     );
@@ -286,6 +270,8 @@ class _HomePageState extends State<HomePage> {
                                                 onTap: () {
                                                   selectedIndex = index;
                                                   functions.newsList.clear();
+                                                  pressed1 = false;
+                                                  pressed2 = false;
                                                   setState(() {});
                                                   Future.delayed(
                                                       const Duration(
@@ -322,25 +308,9 @@ class _HomePageState extends State<HomePage> {
                                                 builder: ((context) {
                                                   return NewsScreen(
                                                     pressed: pressed2,
-                                                      news: functions
-                                                          .newsList[index],
-                                                      image: functions
-                                                              .newsList[index]
-                                                          ['image_url'],
-                                                      title: functions
-                                                              .newsList[index]
-                                                          ['title'],
-                                                      link: functions.newsList[index]
-                                                          ['link'],
-                                                      author: functions
-                                                              .newsList[index]
-                                                          ['creator'][0],
-                                                      date: functions
-                                                              .newsList[index]
-                                                          ['pubDate'],
-                                                      content: functions
-                                                              .newsList[index]
-                                                          ['content']);
+                                                    news: functions
+                                                        .newsList[index],
+                                                  );
                                                 }),
                                               ),
                                             );
